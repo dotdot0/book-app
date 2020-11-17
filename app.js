@@ -4,7 +4,7 @@ const command = process.argv[2]
 const bookName = process.argv[3]
 const authorName = process.argv[4]
 
-const {MongoClient, ObjectID} = mongodb
+const {MongoClient} = mongodb
 
 const connectionURL = 'mongodb://127.0.0.1:27017'
 const databaseName = 'book-app'
@@ -28,7 +28,7 @@ MongoClient.connect(connectionURL, { useNewUrlParser : true }, (error, client) =
         }
       })
     }
-    
+
     else if(command == 'remove'){
       db.collection('book').deleteOne({ 
         _bookName : bookName
@@ -61,5 +61,45 @@ MongoClient.connect(connectionURL, { useNewUrlParser : true }, (error, client) =
         }
       })
     }
+
+    else if(command == 'rename'){
+      db.collection('book').updateOne({
+        _bookName : bookName
+      }, {
+        $set: {
+          _bookName : authorName
+        }
+      }).then((data) => {
+        if(data.modifiedCount > 0){
+          console.log(`Modified name of the book from ${bookName} to ${authorName}`);
+        }
+        else{
+          console.log('Found nothing to modify');
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+    }
+
+    else if(command == 'renameAuthor'){
+      db.collection('book').updateOne({
+        _authorName : bookName
+      }, {
+        $set:{
+          _authorName : authorName
+        }
+      }).then((data) => {
+        if(data.modifiedCount > 0){
+          console.log(`Modified name of the book from ${bookName} to ${authorName}`);
+        }
+        else{
+          console.log('Found nothing to modify');
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
+  
+    }
   }
+
 })
