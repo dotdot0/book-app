@@ -63,6 +63,7 @@ MongoClient.connect(connectionURL, { useNewUrlParser : true }, (error, client) =
     }
 
     else if(command == 'rename'){
+      if(bookName != authorName){
       db.collection('book').updateOne({
         _bookName : bookName
       }, {
@@ -80,8 +81,13 @@ MongoClient.connect(connectionURL, { useNewUrlParser : true }, (error, client) =
         console.log(error);
       })
     }
+    else{
+      console.log(`The name of the book is already ${bookName}`)
+    }
+  }
 
     else if(command == 'renameAuthor'){
+      if(bookName != authorName){
       db.collection('book').updateOne({
         _authorName : bookName
       }, {
@@ -98,7 +104,10 @@ MongoClient.connect(connectionURL, { useNewUrlParser : true }, (error, client) =
       }).catch((error) => {
         console.log(error);
       })
-  
+    }
+    else{
+      console.log(`The name of the author is already ${bookName}`);
+    }
     }
   }
 
